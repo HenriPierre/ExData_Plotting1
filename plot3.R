@@ -1,0 +1,15 @@
+require("dplyr")
+require("lubridate")
+Power<-read.table("household_power_consumption.txt",na.strings = "?",header = TRUE,sep = ";")
+datetime <- dmy_hms(paste(Power$Date, Power$Time))
+Power<-cbind(datetime,Power)
+Power$Date<-as.Date(Power$Date,format="%d/%m/%Y")
+Subset<-filter(Power,Date=="2007-02-01"|Date=="2007-02-02")
+png("plot3.png")
+
+plot(Subset$Sub_metering_1,ylab="Energy sub metering",xlab="",type="l",col="black")
+lines(Subset$Sub_metering_2,col="red")
+lines(Subset$Sub_metering_3,col="blue")
+legend("topright",lwd=2,col=c("black","red","blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+
+dev.off()
